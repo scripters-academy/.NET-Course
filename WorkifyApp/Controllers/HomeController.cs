@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using WorkifyApp.Models;
 
 namespace WorkifyApp.Controllers
 {
@@ -10,7 +12,17 @@ namespace WorkifyApp.Controllers
         }
         public IActionResult Privacy()
         {
-            return View();
+            throw new Exception(Activity.Current?.Id ?? HttpContext.TraceIdentifier);
+            //return View();
+        }
+
+        public IActionResult Error()
+        {
+            var model = new ErrorViewModel
+            {
+                RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier
+            };
+            return View(model);
         }
     }
 }
