@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WorkifyApp.Models;
 
 namespace WorkifyApp.Data
 {
@@ -8,5 +9,6 @@ namespace WorkifyApp.Data
         {
             
         }
+        public DbSet<WorkItem> WorkItems { get; set; }
     }
 }
