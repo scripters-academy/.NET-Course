@@ -1,29 +1,63 @@
-﻿<div class="container">
+﻿@using WorkifyApp.Constants
+@model List<WorkItem>
+<div class="container">
     <div class="d-flex justify-content-between">
         <h3>Work Items List</h3>
         <button class="btn btn-success" onclick="location.href='@Url.Action("Add", "WorkItem")'">
+            <i class="bi bi-plus-lg"></i>
             Add New work Item
-            </button>
+        </button>
     </div>
     <table class="table table-striped">
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Status</th>
+                <th scope="col">Actions</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-            </tr>
-            <tr>
-                <th scope="row">2</th>
-                <td>yaman</td>
-                <td>Test</td>
-            </tr>
+            @foreach(var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.Id</th>
+                    <td>@item.Title</td>
+                    <td>@item.Description</td>
+                    <td>
+                        @{
+                            var textBgColor = string.Empty;
+                            var textToDisplay = string.Empty;
+
+                            switch (item.Status)
+                            {
+                                case WorkItemStatus.ToDo:
+                                    textBgColor = "text-bg-secondary";
+                                    textToDisplay = "to do";
+                                    break;
+                                case WorkItemStatus.InProgress:
+                                    textBgColor = "text-bg-primary";
+                                    textToDisplay = "in progress";
+                                    break;
+                                case WorkItemStatus.Done:
+                                    textBgColor = "text-bg-success";
+                                    textToDisplay = "done";
+                                    break;
+                            }
+                            <span class="badge @textBgColor">@textToDisplay</span>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" asp-controller="WorkItem" asp-action="Edit" asp-route-id="@item.Id">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+                        <a class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

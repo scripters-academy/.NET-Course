@@ -1,12 +1,13 @@
-﻿@model WorkItem
+﻿@using WorkifyApp.Constants
+@model WorkItem
 <div class="container">
     <div class="d-flex justify-content-center">
         <div class="card w-50">
             <div class="card-header">
-                Add New Task
+                Update Task : @Model.Title
             </div>
             <div class="card-body">
-                <form asp-action="Add" method="post">
+                <form asp-action="Edit" method="post">
                     <div class="form-group mb-3">
                         <label asp-for="Title" class="form-label">Title</label>
                         <input asp-for="Title" type="text" class="form-control" />
@@ -14,6 +15,14 @@
                     <div class="form-group mb-3">
                         <label asp-for="Description" class="form-label">Description</label>
                         <input asp-for="Description" type="text" class="form-control" />
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="Status" class="form-label">Status</label>
+                        <select class="form-control" asp-for="Status">
+                            <option value="@WorkItemStatus.ToDo">To Do</option>
+                            <option value="@WorkItemStatus.InProgress">In Progress</option>
+                            <option value="@WorkItemStatus.Done">Done</option>
+                        </select>
                     </div>
                     <div class="d-flex justify-content-between">
                         <button type="submit" class="btn btn-primary">Save</button>
@@ -23,6 +32,6 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
