@@ -43,5 +43,13 @@ namespace WorkifyApp.Controllers
             _db.SaveChanges();
             return RedirectToAction("Index");
         }
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var workItem = _db.WorkItems.Find(id);
+            _db.WorkItems.Remove(workItem);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
     }
 }
