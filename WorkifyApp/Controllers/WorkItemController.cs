@@ -24,10 +24,14 @@ namespace WorkifyApp.Controllers
         }
         [HttpPost]
         public IActionResult Add(WorkItem workItem)
-        {
-            _db.WorkItems.Add(workItem);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+        {   
+            if (ModelState.IsValid)
+            {
+                _db.WorkItems.Add(workItem);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(workItem);
         }
 
         [HttpGet]
@@ -39,9 +43,13 @@ namespace WorkifyApp.Controllers
         [HttpPost]
         public IActionResult Edit(WorkItem workItem)
         {
-            _db.WorkItems.Update(workItem);
-            _db.SaveChanges();
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _db.WorkItems.Update(workItem);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(workItem);
         }
         [HttpPost]
         public IActionResult Delete(int id)

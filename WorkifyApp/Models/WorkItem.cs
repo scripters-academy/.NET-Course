@@ -6,7 +6,7 @@ namespace WorkifyApp.Models
     public class WorkItem
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage ="Please Write Title")]
         public string Title { get; set; }
         public string? Description { get; set; }
         [Required]
