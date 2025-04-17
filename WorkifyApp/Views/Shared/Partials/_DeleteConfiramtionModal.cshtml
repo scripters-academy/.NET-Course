@@ -1,7 +1,15 @@
-﻿@model WorkItem
+﻿@using WorkifyApp.ViewModel
+@model DeleteConfirmationViewModel
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#model-@Model.Id">
-    <i class="bi bi-trash"></i>
+<button type="button" class="@Model.ButtonStyleClass" data-bs-toggle="modal" data-bs-target="#model-@Model.Id">
+    @if (Model.IconButtonContent)
+    {
+        <i class="@Model.ButtonContent"></i>
+    }
+    else
+    {
+        @Model.ButtonContent
+    }
 </button>
 <!-- Modal -->
 <div class="modal fade" id="model-@Model.Id" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -9,11 +17,11 @@
         <div class="modal-content">
             <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Confirmation</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">@Model.Title</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you Sure You want to delete @Model.Title Task
+                    @Model.Message
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
