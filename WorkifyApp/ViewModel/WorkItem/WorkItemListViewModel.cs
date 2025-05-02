@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WorkifyApp.Constants;
 
-namespace WorkifyApp.Models
+namespace WorkifyApp.ViewModel.WorkItem
 {
-    public class WorkItem
+    public class WorkItemListViewModel
     {
         public int Id { get; set; }
         public string Title { get; set; }

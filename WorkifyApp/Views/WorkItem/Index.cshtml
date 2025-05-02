@@ -1,5 +1,7 @@
 ﻿@using WorkifyApp.Constants
-@model List<WorkItem>
+@using WorkifyApp.ViewModel
+@using WorkifyApp.ViewModel.WorkItem
+@model List<WorkItemListViewModel>
 <div class="container">
     <div class="d-flex justify-content-between">
         <h3>Work Items List</h3>
@@ -52,8 +54,19 @@
                         <a class="btn btn-warning btn-sm" asp-controller="WorkItem" asp-action="Edit" asp-route-id="@item.Id">
                             <i class="bi bi-pencil-square"></i>
                         </a>
-
-                        @await Html.PartialAsync("Partials/_DeleteConfiramtionModal", item)
+                        @{
+                            var deleteConfiramtionViewModel = new DeleteConfirmationViewModel
+                            {
+                                Id = item.Id,
+                                ButtonStyleClass = "btn btn-success btn-sm",
+                                IconButtonContent = false,
+                                ButtonContent = "Delete",
+                                Title = "Delete Confirmation",
+                                Message = $"Are You Sure You Want To Delete {item.Title} Task",
+                                Action = "Delete"
+                            };
+                        }
+                        @await Html.PartialAsync("Partials/_DeleteConfirmationModal", deleteConfiramtionViewModel)
                     </td>
                 </tr>
             }
