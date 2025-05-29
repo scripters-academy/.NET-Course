@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Hosting.StaticWebAssets;
 using Microsoft.EntityFrameworkCore;
 using WorkifyApp.Data;
+using WorkifyApp.Services;
+using WorkifyApp.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 StaticWebAssetsLoader.UseStaticWebAssets(builder.Environment, builder.Configuration);
@@ -10,7 +12,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-
+builder.Services.AddScoped<IWorkItemService , WorkItemService>();
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

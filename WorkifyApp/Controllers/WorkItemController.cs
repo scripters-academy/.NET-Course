@@ -2,30 +2,22 @@
 using WorkifyApp.Constants;
 using WorkifyApp.Data;
 using WorkifyApp.Models;
+using WorkifyApp.Services.Interfaces;
 using WorkifyApp.ViewModel.WorkItem;
 
 namespace WorkifyApp.Controllers
 {
     public class WorkItemController : Controller
     {
-        private readonly ApplicationDbContext _db;
-
-        public WorkItemController(ApplicationDbContext db)
+        private readonly IWorkItemService _workItemService;
+        public WorkItemController( IWorkItemService workItemService)
         {
-            _db = db;
+            _workItemService = workItemService;
         }
 
         public IActionResult Index()
         {
-            var workItems = _db.WorkItems.ToList();
-            var viewModel = workItems.Select(x => new WorkItemListViewModel
-            {
-                Id = x.Id,
-                Description = x.Description,
-                Status = x.Status,
-                Title = x.Title
-            }).ToList();
-            return View(viewModel);
+            return View(_workItemService.GetForListPage());
         }
         public IActionResult Add()
         {
@@ -36,14 +28,7 @@ namespace WorkifyApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var workItem = new WorkItem
-                {
-                    Title = workItemViewModel.Title,
-                    Description = workItemViewModel.Description,
-                    Status = WorkItemStatus.ToDo
-                };
-                _db.WorkItems.Add(workItem);
-                _db.SaveChanges();
+                _workItemService.Create(workItemViewModel);
                 return RedirectToAction("Index");
             }
             return View(workItemViewModel);
@@ -52,32 +37,21 @@ namespace WorkifyApp.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var workItem = _db.WorkItems.Find(id);
-            if (workItem == null)
-                return NotFound();
-            var workItemViewModel = new EditWorkItemViewModel
+            try
             {
-                Id = workItem.Id,
-                Description = workItem.Description,
-                Status = workItem.Status,
-                Title = workItem.Title
-            };
-            return View(workItemViewModel);
+                return View(_workItemService.GetForEditPage(id));
+            }
+            catch (Exception)
+            {
+                return NotFound();
+            }
         }
         [HttpPost]
         public IActionResult Edit(EditWorkItemViewModel workItemViewModel)
         {
             if (ModelState.IsValid)
             {
-                var workItem = new WorkItem
-                {
-                    Id = workItemViewModel.Id,
-                    Description = workItemViewModel.Description,
-                    Status = workItemViewModel.Status,
-                    Title = workItemViewModel.Title
-                };
-                _db.WorkItems.Update(workItem);
-                _db.SaveChanges();
+                _workItemService.Update(workItemViewModel);
                 return RedirectToAction("Index");
             }
             return View(workItemViewModel);
@@ -85,9 +59,7 @@ namespace WorkifyApp.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var workItem = _db.WorkItems.Find(id);
-            _db.WorkItems.Remove(workItem);
-            _db.SaveChanges();
+            _workItemService.Delete(id);
             return RedirectToAction("Index");
         }
     }
